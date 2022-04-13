@@ -15,8 +15,8 @@ def find(x):
     return parent[x]
 
 
-n, m = map(int, input().split())
-info = [list(map(int, input().split())) for _ in range(m)]
+n, m = map(int, sys.stdin.readline().split())
+info = [list(map(int, sys.stdin.readline().split())) for _ in range(m)]
 parent = [x for x in range(n+1)]  # 0 부터 n까지 !
 q = deque(info)
 
