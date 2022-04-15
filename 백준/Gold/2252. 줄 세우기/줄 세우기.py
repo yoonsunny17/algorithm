@@ -1,6 +1,7 @@
 from collections import deque
+import sys
 
-N, M = map(int, input().split())
+N, M = map(int, sys.stdin.readline().split())
 
 indegree = [0]*(N+1)
 graph = [[] for _ in range(N+1)]
