@@ -1,15 +1,15 @@
 H, W = map(int, input().split())
-pillars = list(map(int, input().split()))
+heights = list(map(int, input().split()))
 
 ans = 0
 
 for i in range(1, W-1):
-    left_pillar = max(pillars[:i])
-    right_pillar = max(pillars[i+1:])
+    left_height = max(heights[:i])
+    right_height = max(heights[i+1:])
 
-    short_pillar = min(left_pillar, right_pillar)
+    shorter = min(left_height, right_height)
 
-    if pillars[i] < short_pillar:
-        ans += short_pillar - pillars[i]
-    
-print(f'{ans}')
+    if heights[i] < shorter:
+        ans += shorter - heights[i]
+
+print(ans)
