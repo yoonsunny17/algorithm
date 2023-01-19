@@ -1,13 +1,14 @@
-def dfs(i, N, M):
-    if i == M:
+def dfs(idx, n, m):
+    if idx == m:
         print(' '.join(map(str, stack)))
+        return
+
     else:
-        for j in range(1, N+1):
-            stack.append(j)
-            dfs(i+1, N, M)
+        for i in range(1, n+1):
+            stack.append(i)
+            dfs(idx+1, n, m)
             stack.pop()
 
-
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 stack = []
-dfs(0, N, M)
+dfs(0, n, m)
