@@ -1,15 +1,18 @@
-def dfs(i, N, M):
-    if i == M:
+def dfs(i):
+    if i == m:
         print(' '.join(map(str, stack)))
+        return
+    
     else:
-        for j in numbs:
-            if j not in stack:
-                stack.append(j)
-                dfs(i+1, N, M)
+        for numb in numbs:
+            if numb not in stack:
+                stack.append(numb)
+                dfs(i+1)
                 stack.pop()
 
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 numbs = list(map(int, input().split()))
 numbs.sort()
 stack = []
-dfs(0, N, M)
+
+dfs(0)
