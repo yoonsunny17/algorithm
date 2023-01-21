@@ -1,13 +1,19 @@
-def dfs(start):
-    if len(stack) == M:
+def dfs(i):
+    if i == m:
         print(' '.join(map(str, stack)))
+        return
     else:
-        for i in range(start, N+1):
-            stack.append(i)
-            dfs(i)
-            stack.pop()
+        for j in range(1, n+1):
+            if len(stack) == 0:
+                stack.append(j)
+                dfs(i+1)
+                stack.pop()
+            elif len(stack) != 0 and j >= stack[-1]:
+                stack.append(j)
+                dfs(i+1)
+                stack.pop()
 
-
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 stack = []
-dfs(1)
+
+dfs(0)
