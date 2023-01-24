@@ -1,26 +1,27 @@
-import sys
-
-N, S = map(int, sys.stdin.readline().split())
-numbs = list(map(int, sys.stdin.readline().split()))
+N, S = map(int, input().split())
+numbs = list(map(int, input().split()))
 
 start = 0
 end = 1
 interval_sum = numbs[0]
-min_rlt = float("inf")
+min_len = float('inf')
 
 while True:
     if interval_sum >= S:
-        if end - start < min_rlt:
-            min_rlt = end - start
+        if end - start < min_len:
+            min_len = end - start
+        
         interval_sum -= numbs[start]
         start += 1
+    
     elif end == N:
         break
+
     else:
         interval_sum += numbs[end]
         end += 1
 
-if min_rlt == float("inf"):
+if min_len == float('inf'):
     print(0)
 else:
-    print(min_rlt)
+    print(min_len)
