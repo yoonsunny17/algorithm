@@ -1,30 +1,21 @@
+import sys
+
 def dfs(t):
-    global flag
-
-    if len(t) == len(S):
-        if t == S:
-            flag = True
-        return
-
-    if t[0] == 'B':
-        t.reverse()
-        t.pop()
-        dfs(t)
-        t.append('B')
-        t.reverse()
+    if t == S:
+        print(1)
+        sys.exit()
+    
+    if len(t) == 0:
+        return 0
     
     if t[-1] == 'A':
-        t.pop()
-        dfs(t)
-        t.append('A')
+        dfs(t[:-1])
+
+    if t[0] == 'B':
+        dfs(t[1:][::-1])
 
 S = list(input())
 T = list(input())
 
-flag = False
-dfs(T)
-
-if flag == False:
-    print(0)
-else:
-    print(1)
+dfs(T)  
+print(0)
