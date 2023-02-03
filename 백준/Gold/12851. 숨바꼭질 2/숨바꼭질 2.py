@@ -1,23 +1,24 @@
 from collections import deque
 
-N, K = map(int, input().split())
-MAX_SIZE = 100001
-
+n, k = map(int, input().split())
+maxv = 100001
 q = deque()
-q.append(N)
+visited = [-1] * maxv
+q.append(n)
+visited[n] = 0
 
-cnt=0
-check=[-1]* MAX_SIZE
-check[N]=0
+cnt = 0
 while q:
     x = q.popleft()
-    if x==K:
-        cnt+=1
-    for y in [x * 2, x + 1, x - 1]:
-        if 0 <= y < MAX_SIZE:
-            if check[y]==-1 or check[y]==check[x]+1: #시간: 방문한 적 없거나 현재시간 +1인경우
-                check[y]=check[x]+1
-                q.append(y)
 
-print(check[K])
+    if x == k:
+        cnt += 1
+    
+    for dx in [x-1, x+1, 2*x]:
+        if 0 <= dx < maxv:
+            if visited[dx] == -1 or visited[dx] == visited[x] + 1:
+                visited[dx] = visited[x] + 1
+                q.append(dx)
+
+print(visited[k])
 print(cnt)
