@@ -1,80 +1,62 @@
-# 가운데 손가락 모양 제외 네가지 테트리스 dfs 돌리기 함수
-def tetris(r, c, idx, cnt):
-    global max_cnt
+import sys
 
-    # 테트리스 블록 네개를 다 모았다면,
-    if idx == 4:
-        # 최댓값 갱신 해줘
-        if max_cnt < cnt:
-            max_cnt = max(max_cnt, cnt)
-
-    # 아직 다 모으지 않았다면, 열심히 모아
-    else:
-        for i in range(4):
-            rr = r + dr[i]
-            cc = c + dc[i]
-            # 탐색 지점이 범위 내에 존재하고, 아직 탐색한 적이 없으면
-            if 0 <= rr < N and 0 <= cc < M and not visited[rr][cc]:
-                # 방문 기록 남기고 다음번 블럭 탐색하러 가봐
-                visited[rr][cc] = 1
-                tetris(rr, cc, idx+1, cnt+matrix[rr][cc])
-                # 백트래킹!
-                visited[rr][cc] = 0
-
-
-N, M = map(int, input().split())
-matrix = [list(map(int, input().split())) for _ in range(N)]
-visited = [[0]*M for _ in range(N)]
-
-# delta 우 하 좌 상
-dr = [0, 1, 0, -1]
-dc = [1, 0, -1, 0]
-
-max_cnt, max_rlt = 0, 0
-min_cnt = float('inf')
-
-
-# 가운데손가락 모양 테트리스를 배치해보자
-# 우선 십자가 모양으로 배치해본다고 생각해보자 = 하나를 중심으로 잡고, 네방향 탐색해봐
-# 네방향 탐색했을 때 그 중 가장 큰 세가지 숫자 + 중심 숫자 & 최댓값 갱신하면 되겠다
-# 재귀함수로 불가능한 사각형
-def cross(r, c):
-    # 가운데 값 고정
-    max_rlt = matrix[r][c]
-    edges = 4  # 네방향 탐색해줄 것 (탐색지점이 아닐 때 하나씩 빼줄 예정)
-    min_rlt = float('inf')
-
+# ㅗ 모양 제외 다른 모양들 최댓값 계산하기
+def dfs(r, c, dsum, cnt):
+    global maxV
+    # 모양 완성되었을 때 최댓값 계산해주기
+    if cnt == 4:
+        maxV = max(maxV, dsum)
+        return
+    
     for i in range(4):
         rr = r + dr[i]
         cc = c + dc[i]
+        # 탐색 지점이 범위 내에 존재하고, 아직 방문하지 않았다면,
+        if 0 <= rr < N and 0 <= cc <M and not visited[rr][cc]:
+            # 방문 표시하고, dfs 재귀 돌리고, 방문표시 해제해줭
+            visited[rr][cc] = True
+            dfs(rr, cc, dsum + matrix[rr][cc], cnt+1)
+            visited[rr][cc] = False
 
-        if edges == 2:
-            return 0
 
-        # 탐색 지점을 벗어나는 경우, edge -= 1
-        if rr < 0 or rr >= N or cc < 0 or cc >= M:
-            edges -= 1
-            continue
+# ㅗ 모양 최댓값 계산하기
+def cross(r, c):
+    global maxV
 
-        max_rlt += matrix[rr][cc]
-        if matrix[rr][cc] < min_rlt:
-            min_rlt = matrix[rr][cc]
+    for i in range(4):
+        # 초기값은 시작지점의 값으로 지정
+        temp = matrix[r][c]
+        # 세 방향씩 검사해야 하니까 뺑뺑이
+        for k in range(3):
+            t = (i+k) % 4
+            rr = r + dr[t]
+            cc = c + dc[t]
+            # 탐색 지점이 범위 내에 존재하지 않는 경우,
+            if not (0 <= rr < N and 0 <= cc < M):
+                # temp값을 초기화 해주고 끝내
+                temp = 0
+                break
+            # 종료 조건에 걸리지 않는 경우면 temp값 누적
+            temp += matrix[rr][cc]
+        maxV = max(maxV, temp)
+    
 
-    if edges == 4:
-        max_rlt -= min_rlt
+N, M = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(N)]
+visited = [[False] * M for _ in range(N)]
 
-    return max_rlt
+# 상 하 좌 우 delta
+dr = [-1, 1, 0, 0]
+dc = [0, 0, -1, 1]
 
+maxV = 0 # 최댓값 변수
 
 for i in range(N):
     for j in range(M):
-        # tetris function backtracking
-        visited[i][j] = 1
-        tetris(i, j, 1, matrix[i][j])
-        visited[i][j] = 0
+        # 방문처리 해주고; dfs 돌리고; 방문처리 해재하고; ㅗ모양 확인
+        visited[i][j] = True
+        dfs(i, j, matrix[i][j], 1)
+        visited[i][j] = False
+        cross(i, j)
 
-        temp = cross(i, j)
-        if temp > max_cnt:
-            max_cnt = max(temp, max_cnt)
-
-print(max_cnt)
+print(maxV)
