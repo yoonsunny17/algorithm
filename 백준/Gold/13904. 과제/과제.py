@@ -1,18 +1,26 @@
 N = int(input())
 
 arr = []
-answer = [0 for _ in range(1000)]  # 최대 1000일의 과제
+check = [False]*1001
 
 for _ in range(N):
     d, w = map(int, input().split())
     arr.append([d, w])
 
-arr.sort(reverse=True, key=lambda x: x[1])  # 점수를 기준으로 내림차순 정렬
+arr.sort(reverse=True, key=lambda x: x[1])
+answer = 0
 
-for i in range(N):
-    for j in range(arr[i][0]-1, -1, -1):  # 주어진 마감일부터 첫날까지 역순으로 검사
-        if answer[j] == 0:  # 아직 과제를 안했으면
-            answer[j] = arr[i][1]  # 과제 해주기
-            break  # 최댓값만 저장하고 끝내야함
+for day, worth in arr:
+    i = day
+    # 과제를 할 날짜를 탐색하기
+    while i > 0 and check[i]:
+        i -= 1
+    
+    # 과제를 할 날짜가 없다면 패스하기
+    if i == 0:
+        continue
+    else:
+        check[i] = True
+        answer += worth
 
-print(sum(answer))
+print(answer)
