@@ -2,17 +2,19 @@ from collections import deque
 
 def solution(people, limit):
     answer = 0
-    people.sort()
+    people.sort()  # 오름차순으로 재정렬
+    
     q = deque(people)
+    # 두명 태울 수 있을 때를 생각해보자
     while len(q) > 1:
-        # 가장 가벼운 사람이랑 가장 무거운 사람이 함께 탈 수 있는 경우
+        # 가장 가벼운 사람 + 가장 무거운 사람 <= limit 일때가 최적이겠지
         if q[0] + q[-1] <= limit:
-            # 가장 무거운 사람 제거해주고
+            # 이게 만족한다면 일단 무거운사람 제명하고
             q.popleft()
-        answer += 1
+        # 맨앞에 가장 가벼운 사람도 빼주고, 그담에 +1 해줘
         q.pop()
-        
-    # 이제 한명 남았으면 +1 해주고 리턴해주자
+        answer += 1
+    
     if len(q) == 1:
         answer += 1
     return answer
